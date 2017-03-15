@@ -1,11 +1,11 @@
 package com.algos.vid;
 
-public class StackOfStrings {
+public class Stack<Item> {
 
     private Node first = null;
 
     private class Node {
-        String value;
+        Item value;
         Node next;
     }
 
@@ -13,13 +13,13 @@ public class StackOfStrings {
         return first == null;
     }
 
-    public String pop() {
-        String val = first.value;
+    public Item pop() {
+        Item val = first.value;
         first = first.next;
         return val;
     }
 
-    public void push(String item) {
+    public void push(Item item) {
         Node oldFirst = first;
         first = new Node();
         first.value = item;

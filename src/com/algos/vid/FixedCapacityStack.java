@@ -1,16 +1,16 @@
 package com.algos.vid;
 
-public class FixedCapacityStackOfStrings {
+public class FixedCapacityStack<Item> {
 
     private int idx = 0;
-    private String[] arr;
+    private Item[] arr;
 
-    public FixedCapacityStackOfStrings() {
-        arr = new String[1];
+    public FixedCapacityStack() {
+        arr = (Item[]) new Object[1];
     }
 
-    public String pop() {
-        String item = arr[idx--];
+    public Item pop() {
+        Item item = arr[idx--];
         arr[idx] = null;
         if (idx > 0 && idx == arr.length / 4) {
             resize(arr.length / 2);
@@ -22,7 +22,7 @@ public class FixedCapacityStackOfStrings {
         return idx == 0;
     }
 
-    public void push(String item) {
+    public void push(Item item) {
         if (arr.length == idx + 1) {
             resize(arr.length * 2);
         }
@@ -30,7 +30,7 @@ public class FixedCapacityStackOfStrings {
     }
 
     private void resize(int cap) {
-        String[] temp = new String[cap];
+        Item[] temp = (Item[]) new Object[cap];
         for (int i = 0; i < cap; i++) {
             temp[i] = arr[i];
         }

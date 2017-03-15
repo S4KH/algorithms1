@@ -1,12 +1,12 @@
 package com.algos.vid;
 
-public class QueueofStrings {
+public class Queue<Item> {
 
     private Node first;
     private Node last;
 
     private class Node {
-        String val;
+        Item val;
         Node next;
     }
 
@@ -14,7 +14,7 @@ public class QueueofStrings {
         return first == null;
     }
 
-    public void enqueue(String item) {
+    public void enqueue(Item item) {
         Node oldLast = last;
         last = new Node();
         last.val = item;
@@ -26,8 +26,8 @@ public class QueueofStrings {
         }
     }
 
-    public String dequeue() {
-        String item = first.val;
+    public Item dequeue() {
+        Item item = first.val;
         first = first.next;
         if (isEmpty()) {
             last = null;

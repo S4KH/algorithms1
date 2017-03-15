@@ -1,16 +1,16 @@
 package com.algos.vid;
 
-public class ArrayQueueOfStrings {
+public class ArrayQueue<Item> {
     private int head = 0;
     private int tail = 0;
-    private String[] arr;
+    private Item[] arr;
 
-    public ArrayQueueOfStrings() {
-        arr = new String[1];
+    public ArrayQueue() {
+        arr = (Item[]) new Object[1];
     }
 
-    public String pop() {
-        String item = arr[head--];
+    public Item pop() {
+        Item item = arr[head--];
         arr[head] = null;
         if (head > 0 && head == arr.length / 4) {
             resize(arr.length / 2);
@@ -22,7 +22,7 @@ public class ArrayQueueOfStrings {
         return head == 0;
     }
 
-    public void push(String item) {
+    public void push(Item item) {
         if (arr.length == tail + 1) {
             resize(arr.length * 2);
         }
@@ -30,7 +30,7 @@ public class ArrayQueueOfStrings {
     }
 
     private void resize(int cap) {
-        String[] temp = new String[cap];
+        Item[] temp = (Item[]) new Object[cap];
         for (int i = 0; i < cap; i++) {
             temp[i] = arr[i];
             if (i - 1 > 0 && arr[i] == null) {
