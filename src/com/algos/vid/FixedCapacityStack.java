@@ -1,6 +1,8 @@
 package com.algos.vid;
 
-public class FixedCapacityStack<Item> {
+import java.util.Iterator;
+
+public class FixedCapacityStack<Item> implements Iterable<Item> {
 
     private int idx = 0;
     private Item[] arr;
@@ -35,6 +37,27 @@ public class FixedCapacityStack<Item> {
             temp[i] = arr[i];
         }
         arr = temp;
+    }
+
+    @Override
+    public Iterator<Item> iterator() {
+        return new ReverseArrayIterator();
+    }
+
+    private class ReverseArrayIterator implements Iterator<Item> {
+
+        private int i = idx;
+
+        @Override
+        public boolean hasNext() {
+            return i > 0;
+        }
+
+        @Override
+        public Item next() {
+            return arr[--i];
+        }
+
     }
 
 }

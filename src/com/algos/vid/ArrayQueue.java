@@ -1,6 +1,8 @@
 package com.algos.vid;
 
-public class ArrayQueue<Item> {
+import java.util.Iterator;
+
+public class ArrayQueue<Item> implements Iterable<Item> {
     private int head = 0;
     private int tail = 0;
     private Item[] arr;
@@ -39,5 +41,27 @@ public class ArrayQueue<Item> {
         }
         head = 0;
         arr = temp;
+    }
+
+    @Override
+    public Iterator<Item> iterator() {
+        // TODO Auto-generated method stub
+        return new ArrayIterator();
+    }
+
+    private class ArrayIterator implements Iterator<Item> {
+
+        private int i = head;
+
+        @Override
+        public boolean hasNext() {
+            return i < tail;
+        }
+
+        @Override
+        public Item next() {
+            return arr[++i];
+        }
+
     }
 }

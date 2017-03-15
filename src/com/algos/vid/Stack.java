@@ -1,6 +1,8 @@
 package com.algos.vid;
 
-public class Stack<Item> {
+import java.util.Iterator;
+
+public class Stack<Item> implements Iterable<Item> {
 
     private Node first = null;
 
@@ -24,6 +26,30 @@ public class Stack<Item> {
         first = new Node();
         first.value = item;
         first.next = oldFirst;
+    }
+
+    @Override
+    public Iterator<Item> iterator() {
+        // TODO Auto-generated method stub
+        return new ListIterator();
+    }
+
+    private class ListIterator implements Iterator<Item> {
+
+        private Node current = first;
+
+        @Override
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        @Override
+        public Item next() {
+            Item item = current.value;
+            current = current.next;
+            return item;
+        }
+
     }
 
 }
