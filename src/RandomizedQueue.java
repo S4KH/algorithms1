@@ -19,32 +19,70 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return n == 0;
     }
 
+    private void checkItem(Item item) throws Exception {
+        if (item == null) {
+            throw new NullPointerException();
+        }
+    }
+
     // return the number of items on the queue
     public int size() {
         return n;
     }
 
     // add the item
-    public void enqueue(Item item) {
-        if (n == a.length)
+    public void enqueue(Item item) throws Exception {
+        checkItem(item);
+        if (n == a.length) {
             resize(2 * a.length);
-        a[++n] = item;
+        }
+        a[n++] = item;
     }
 
     // remove and return a random item
     public Item dequeue() {
-        if (isEmpty())
+        if (isEmpty()) {
             throw new NoSuchElementException("Stack underflow");
-        int idx = StdRandom.uniform(n);
-        Item rItem = a[idx];
-        a[idx] = null;
-        resize(--n);
+        }
+        StdRandom.shuffle(a, 0, n);
+        Item rItem = a[n - 1];
+        a[n - 1] = null;
+        n--;
+        if (n > 0 && n == a.length / 4)
+            resize(a.length / 2);
         return rItem;
     }
 
     // return (but do not remove) a random item
     public Item sample() {
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
         return a[StdRandom.uniform(n)];
+    }
+
+    @Override
+    public Iterator<Item> iterator() {
+        return new ArrayIterator();
+    }
+
+    private class ArrayIterator implements Iterator<Item> {
+
+        private int i = n;
+
+        @Override
+        public boolean hasNext() {
+            return i > 0;
+        }
+
+        @Override
+        public Item next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            StdRandom.shuffle(a, 0, i);
+            return a[--i];
+        }
     }
 
     // resize the underlying array holding the elements
@@ -53,14 +91,21 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         a = java.util.Arrays.copyOf(a, capacity);
     }
 
-    public static void main(String[] args) {
-
-    }
-
-    @Override
-    public Iterator<Item> iterator() {
-        // TODO Auto-generated method stub
-        return null;
+    public static void main(String[] args) throws Exception {
+        RandomizedQueue<String> rq = new RandomizedQueue<>();
+        rq.enqueue("A");
+        rq.enqueue("B");
+        rq.enqueue("C");
+        rq.enqueue("D");
+        // Iterator<String> it = rq.iterator();
+        // while (it.hasNext()) {
+        // System.out.println(it.next());
+        // }
+        System.out.println(rq.dequeue());
+        System.out.println(rq.dequeue());
+        System.out.println(rq.dequeue());
+        System.out.println(rq.dequeue());
+        System.out.println(rq.sample());
     }
 
 }

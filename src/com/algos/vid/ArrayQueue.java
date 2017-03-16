@@ -62,6 +62,5 @@ public class ArrayQueue<Item> implements Iterable<Item> {
         public Item next() {
             return arr[++i];
         }
-
     }
 }
