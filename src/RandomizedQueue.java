@@ -19,7 +19,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return n == 0;
     }
 
-    private void checkItem(Item item) throws Exception {
+    private void checkItem(Item item) {
         if (item == null) {
             throw new NullPointerException();
         }
@@ -31,7 +31,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     // add the item
-    public void enqueue(Item item) throws Exception {
+    public void enqueue(Item item) {
         checkItem(item);
         if (n == a.length) {
             resize(2 * a.length);
@@ -44,13 +44,24 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if (isEmpty()) {
             throw new NoSuchElementException("Stack underflow");
         }
-        StdRandom.shuffle(a, 0, n);
-        Item rItem = a[n - 1];
-        a[n - 1] = null;
+        int ri = StdRandom.uniform(n);
         n--;
+        swap(ri, n);
+        Item rItem = a[n];
+        a[n] = null;
         if (n > 0 && n == a.length / 4)
             resize(a.length / 2);
         return rItem;
+    }
+
+    private void swap(int i, int j) {
+        if (i == j) {
+            return;
+        }
+        Item tmp = a[i];
+        a[i] = a[j];
+        a[j] = tmp;
+        tmp = null;
     }
 
     // return (but do not remove) a random item
@@ -58,21 +69,29 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
-        return a[StdRandom.uniform(n)];
+        int ri = StdRandom.uniform(n);
+        return a[ri];
     }
 
     @Override
     public Iterator<Item> iterator() {
-        return new ArrayIterator();
+        return new RandomArrayIterator();
     }
 
-    private class ArrayIterator implements Iterator<Item> {
+    private class RandomArrayIterator implements Iterator<Item> {
 
-        private int i = n;
+        private Item[] items;
+        private int size;
+
+        public RandomArrayIterator() {
+            items = a;
+            StdRandom.shuffle(items);
+            size = n;
+        }
 
         @Override
         public boolean hasNext() {
-            return i > 0;
+            return size > 0;
         }
 
         @Override
@@ -80,8 +99,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            StdRandom.shuffle(a, 0, i);
-            return a[--i];
+            return items[--size];
         }
     }
 
@@ -89,23 +107,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     private void resize(int capacity) {
         assert capacity >= n;
         a = java.util.Arrays.copyOf(a, capacity);
-    }
-
-    public static void main(String[] args) throws Exception {
-        RandomizedQueue<String> rq = new RandomizedQueue<>();
-        rq.enqueue("A");
-        rq.enqueue("B");
-        rq.enqueue("C");
-        rq.enqueue("D");
-        // Iterator<String> it = rq.iterator();
-        // while (it.hasNext()) {
-        // System.out.println(it.next());
-        // }
-        System.out.println(rq.dequeue());
-        System.out.println(rq.dequeue());
-        System.out.println(rq.dequeue());
-        System.out.println(rq.dequeue());
-        System.out.println(rq.sample());
     }
 
 }
